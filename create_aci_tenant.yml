@@ -1,0 +1,16 @@
+---
+- name: ACI Tenant Demo
+  hosts: aci
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Create ACI Tenant <ANSIBLE_TENANT>
+      aci_tenant:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: RH_ANSIBLE_TENANT_DEMO
+        description: Create by RH_Ansible!
+        state: present

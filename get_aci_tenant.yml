@@ -1,0 +1,13 @@
+- name: Get ACI tenant
+  hosts: aci
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: ACI gather Tenants
+      aci_tenant:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        state: query
