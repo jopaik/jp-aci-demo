@@ -1,15 +1,22 @@
-- name: Get ACI epgs
+---
+- name: ACI Tenant Demo
   hosts: aci
   connection: local
   gather_facts: no
 
   tasks:
-    - name: ACI gather epgs
+    - name: Create ACI EPG RH_EPG_DEMO
       aci_epg:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
         validate_certs: no
         tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        ap: rh_ap_demo
         epg: rh_epg_demo
-        state: query
+        description: rh_epg_demo
+        bd: rh_bd_demo
+        priority: unspecified
+        intra_epg_isolation: unenforced
+        state: absent
+      delegate_to: localhost

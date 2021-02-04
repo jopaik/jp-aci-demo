@@ -1,0 +1,34 @@
+---
+- name: ACI Tenant Demo
+  hosts: aci
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Create ACI AP RH_AP_DEMO
+      aci_ap:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        ap: rh_ap_demo
+        description: rh_ap_demo
+        state: present
+      delegate_to: localhost
+
+    - name: Create ACI EPG RH_EPG_DEMO
+      aci_epg:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        ap: rh_ap_demo
+        epg: rh_epg_demo
+        description: rh_epg_demo
+        bd: rh_bd_demo
+        priority: unspecified
+        intra_epg_isolation: unenforced
+        state: present
+      delegate_to: localhost
