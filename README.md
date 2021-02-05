@@ -1,5 +1,5 @@
 # jp-aci-demo
-Due to the high cost of having Cisco ACI start fabric $250k+ and Cisco ACI Simulator $10k+
+Due to the high cost of having Cisco ACI start fabric $250k+ and Cisco ACI Simulator $10k+(not including the hardware cost)
 Cisco DevNet has Saas version of Cisco APIC on the Internet.
 
 https://sandboxapicdc.cisco.com/
