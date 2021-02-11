@@ -1,11 +1,11 @@
 ---
-- name: ACI Tenant Demo
+- name: ACI Demo remove epg
   hosts: aci
   connection: local
   gather_facts: no
 
   tasks:
-    - name: Create ACI EPG RH_EPG_DEMO
+    - name: Remove ACI EPG RH_EPG_DEMO
       aci_epg:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
