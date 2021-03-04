@@ -1,0 +1,19 @@
+---
+- name: ACI Demo remove VRF
+  hosts: aci
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Add a new VRF to a tenant
+      aci_vrf:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        vrf: rh_vrf_demo
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        descr: rh_vrf_demo
+        policy_control_preference: enforced
+        policy_control_direction: ingress
+        state: absent
+      delegate_to: localhost
