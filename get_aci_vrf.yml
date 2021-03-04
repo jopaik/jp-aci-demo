@@ -1,0 +1,24 @@
+---
+- name: ACI Demo create VRF
+  hosts: aci
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Add a new VRF to a tenant
+      aci_vrf:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        vrf: rh_vrf_demo
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        descr: rh_vrf_demo
+        policy_control_preference: enforced
+        policy_control_direction: ingress
+        state: query
+      delegate_to: localhost
+      register: output
+
+    - name: show vrf
+      debug:
+        msg: "VRF name is {{ output.current[0].fvCtx.attributes.name }}"

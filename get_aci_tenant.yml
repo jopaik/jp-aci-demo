@@ -11,5 +11,10 @@
         password: "{{ password }}"
         validate_certs: no
         tenant: 00_RH_ANSIBLE_TENANT_DEMO
-        description: Create by RH_Ansible!
+        description: RH_Ansible_Demo
         state: query
+      register: output
+
+    - name: show tenant
+      debug:
+        msg: "Tenant's name is {{ output.current[0].fvTenant.attributes.name }}"

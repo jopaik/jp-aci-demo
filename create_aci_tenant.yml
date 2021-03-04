@@ -12,5 +12,5 @@
         password: "{{ password }}"
         validate_certs: no
         tenant: 00_RH_ANSIBLE_TENANT_DEMO
-        description: Create by RH_Ansible!
+        description: RH_Ansible_Demo
         state: present

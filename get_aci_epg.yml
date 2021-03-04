@@ -13,3 +13,11 @@
         tenant: 00_RH_ANSIBLE_TENANT_DEMO
         epg: rh_epg_demo
         state: query
+      register: output
+
+    - name: show epg
+      debug:
+        msg:
+          - "Tenant is      {{ output.current[0].fvTenant.attributes.name }}"
+          - "App Profile is {{ output.current[0].fvTenant.children[0].fvAp.attributes.name }}"
+          - "EPG is         {{ output.current[0].fvTenant.children[0].fvAp.children[0].fvAEPg.attributes.name }}"
