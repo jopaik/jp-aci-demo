@@ -5,7 +5,7 @@
   gather_facts: no
 
   tasks:
-    - name: Add Bridge Domain
+    - name: Add Bridge Domain1
       aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
@@ -18,7 +18,7 @@
         state: present
       delegate_to: localhost
 
-    - name: Add Bridge Domain
+    - name: Add Bridge Domain2
       aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
@@ -31,7 +31,7 @@
         state: present
       delegate_to: localhost
 
-    - name: Add Bridge Domain
+    - name: Add Bridge Domain3
       aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
@@ -43,16 +43,16 @@
         vrf: rh_vrf_demo
         state: present
       delegate_to: localhost
-
-      - name: Add Bridge Domain
-        aci_bd:
-          hostname: "{{ inventory_hostname }}"
-          username: "{{ username }}"
-          password: "{{ password }}"
-          validate_certs: no
-          tenant: 00_RH_ANSIBLE_TENANT_DEMO
-          bd: rh_bd_demo4
-          mac_address: 00:22:BD:F8:19:FE
-          vrf: rh_vrf_demo
-          state: present
-        delegate_to: localhost
+      
+    - name: Add Bridge Domain4
+      aci_bd:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        bd: rh_bd_demo4
+        mac_address: 00:22:BD:F8:19:FE
+        vrf: rh_vrf_demo
+        state: present
+      delegate_to: localhost
