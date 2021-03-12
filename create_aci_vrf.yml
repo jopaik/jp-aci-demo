@@ -5,8 +5,8 @@
   gather_facts: no
 
   tasks:
-    - name: Add a new VRF to a tenant
-      aci_vrf:
+    - name: Get a new VRF to a tenant
+      cisco.aci.aci_vrf:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

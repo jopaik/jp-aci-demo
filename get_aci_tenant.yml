@@ -4,8 +4,8 @@
   gather_facts: no
 
   tasks:
-    - name: ACI gather Tenants
-      aci_tenant:
+    - name: get ACI gather Tenants
+      cisco.aci.aci_tenant:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

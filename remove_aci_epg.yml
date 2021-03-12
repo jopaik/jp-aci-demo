@@ -6,7 +6,7 @@
 
   tasks:
     - name: Remove ACI EPG RH_EPG_DEMO
-      aci_epg:
+      cisco.aci.aci_epg:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

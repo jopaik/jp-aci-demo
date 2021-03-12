@@ -5,8 +5,8 @@
   gather_facts: no
 
   tasks:
-    - name: Add Bridge Domain1
-      aci_bd:
+    - name: Get Bridge Domain1
+      cisco.aci.aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -24,7 +24,7 @@
         msg: "Bridge Domain name is {{ output.current[0].fvBD.attributes.name }}"
 
 
-    - name: Add Bridge Domain2
+    - name: Get Bridge Domain2
       aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
@@ -43,7 +43,7 @@
         msg: "Bridge Domain name is {{ output.current[0].fvBD.attributes.name }}"
 
 
-    - name: Add Bridge Domain3
+    - name: Get Bridge Domain3
       aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
@@ -62,7 +62,7 @@
         msg: "Bridge Domain name is {{ output.current[0].fvBD.attributes.name }}"
 
 
-    - name: Add Bridge Domain4
+    - name: Get Bridge Domain4
       aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"

@@ -5,8 +5,8 @@
   gather_facts: no
 
   tasks:
-    - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO
-      aci_tenant:
+    - name: Get ACI Tenant RH_ANSIBLE_TENANT_DEMO
+      cisco.aci.aci_tenant:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

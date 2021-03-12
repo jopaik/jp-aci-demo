@@ -6,7 +6,7 @@
 
   tasks:
     - name: Create ACI AP RH_AP_DEMO
-      aci_ap:
+      cisco.aci.aci_ap:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -18,7 +18,7 @@
       delegate_to: localhost
 
     - name: Create ACI EPG RH_EPG_DEMO
-      aci_epg:
+      cisco.aci.aci_epg:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

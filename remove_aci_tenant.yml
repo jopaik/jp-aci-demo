@@ -6,7 +6,7 @@
 
   tasks:
     - name: Remove ACI Tenant <ANSIBLE_TENANT>
-      aci_tenant:
+      cisco.aci.aci_tenant:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

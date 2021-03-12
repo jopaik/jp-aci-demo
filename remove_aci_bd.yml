@@ -6,7 +6,7 @@
 
   tasks:
     - name: Add Bridge Domain1
-      aci_bd:
+      cisco.aci.aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -19,7 +19,7 @@
       delegate_to: localhost
 
     - name: Add Bridge Domain2
-      aci_bd:
+      cisco.aci.aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

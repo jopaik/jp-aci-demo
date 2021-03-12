@@ -6,7 +6,7 @@
 
   tasks:
     - name: Add a new VRF to a tenant
-      aci_vrf:
+      cisco.aci.aci_vrf:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"

@@ -4,8 +4,8 @@
   gather_facts: no
 
   tasks:
-    - name: ACI gather epgs
-      aci_epg:
+    - name: get ACI gather epgs
+      cisco.aci.aci_epg:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
