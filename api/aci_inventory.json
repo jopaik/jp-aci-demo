@@ -1,0 +1,63 @@
+[
+  {
+    "asset_type": "inventory",
+    "name": "aci_inventory",
+    "organization": "Default",
+    "variables": "---",
+    "asset_relation": {
+      "host": [
+        {
+          "name": "sandboxapicdc.cisco.com",
+          "variables": "password: ciscopsdt\nusername: admin"
+        }
+      ],
+      "group": [
+        {
+          "name": "aci",
+          "description": "imported",
+          "variables": "{}",
+          "sub_groups": [],
+          "hosts": [
+            "sandboxapicdc.cisco.com"
+          ]
+        }
+      ],
+      "inventory_source": [
+        {
+          "name": "aci_inventory",
+          "source": "scm",
+          "source_path": "inventory",
+          "source_project": "Jp-aci-demo",
+          "schedules": []
+        }
+      ],
+      "roles": [
+        {
+          "name": "Update",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Ad Hoc",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Use",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Read",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Admin",
+          "user": [],
+          "team": []
+        }
+      ]
+    }
+  }
+]

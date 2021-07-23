@@ -1,0 +1,318 @@
+[
+  {
+    "asset_type": "workflow",
+    "name": "aci_demo_workflow_create",
+    "organization": "Default",
+    "asset_relation": {
+      "survey_spec": {},
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "identifier": "7bbd31b9-d369-40aa-8c62-2683c95f36be",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_create_tenant",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "identifier": "0a416179-ef6f-4c0f-ab3d-ac8a402d80d0",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_create_epg",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "identifier": "54104ede-701f-443e-b829-b66f996c3636",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_create_vrf",
+          "success_nodes": [
+            "node3"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "identifier": "a9eeb64f-ae11-4bf4-aeb0-9aeb145b8234",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_create_bd",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "always_nodes": []
+        }
+      ],
+      "schedules": [],
+      "labels": [],
+      "roles": [
+        {
+          "name": "Admin",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Execute",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Read",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Approve",
+          "user": [],
+          "team": []
+        }
+      ]
+    }
+  },
+  {
+    "asset_type": "workflow",
+    "name": "aci_demo_workflow_get",
+    "organization": "Default",
+    "asset_relation": {
+      "survey_spec": {},
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "identifier": "18cdba90-b336-4f29-b77f-325b98385206",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_get_epg",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "identifier": "209b0d1b-9120-4859-b13b-0f36279195b9",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_get_tenants",
+          "success_nodes": [
+            "node0"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "identifier": "70e80d24-638b-487b-a817-a4d33532774f",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_get_vrf",
+          "success_nodes": [
+            "node3"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "identifier": "1d66cea4-48d8-4540-a824-32bd400f2621",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_get_bd",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "always_nodes": []
+        }
+      ],
+      "schedules": [],
+      "labels": [],
+      "roles": [
+        {
+          "name": "Admin",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Execute",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Read",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Approve",
+          "user": [],
+          "team": []
+        }
+      ]
+    }
+  },
+  {
+    "asset_type": "workflow",
+    "name": "aci_demo_workflow_main",
+    "organization": "Default",
+    "asset_relation": {
+      "survey_spec": {},
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "identifier": "60895473-5edc-4a9b-80d0-2b28d7016279",
+          "unified_job_type": "workflow_job",
+          "unified_job_name": "aci_demo_workflow_create",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "identifier": "390efd60-95c2-4873-905b-fa24af897e81",
+          "unified_job_type": "workflow_job",
+          "unified_job_name": "aci_demo_workflow_get",
+          "success_nodes": [
+            "node3"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "identifier": "26d588c1-d0c0-4cb1-8df5-b79fbfea0048",
+          "unified_job_type": "workflow_approval",
+          "unified_job_name": "Move to Get ACI Demo",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "identifier": "2178dc70-adf6-44a5-9374-dc69e02298ce",
+          "unified_job_type": "workflow_approval",
+          "unified_job_name": "Move to Remove ACI demo",
+          "success_nodes": [
+            "node4"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node4",
+          "identifier": "721a304b-58f4-4ca2-96dc-4336a33677c9",
+          "unified_job_type": "workflow_job",
+          "unified_job_name": "aci_demo_workflow_remove",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "always_nodes": []
+        }
+      ],
+      "schedules": [],
+      "labels": [],
+      "roles": [
+        {
+          "name": "Admin",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Execute",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Read",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Approve",
+          "user": [],
+          "team": []
+        }
+      ]
+    }
+  },
+  {
+    "asset_type": "workflow",
+    "name": "aci_demo_workflow_remove",
+    "organization": "Default",
+    "asset_relation": {
+      "survey_spec": {},
+      "workflow_nodes": [
+        {
+          "name": "node0",
+          "identifier": "2e074735-668a-447c-ae35-54f71bbdef2e",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_remove_bd",
+          "success_nodes": [
+            "node3"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node1",
+          "identifier": "9bf1664d-235b-46ff-81df-b57d98bc6d47",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_remove_epg",
+          "success_nodes": [
+            "node2"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node2",
+          "identifier": "832a4238-dfb2-42b4-a305-3ac8b67b397e",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_remove_tenant",
+          "success_nodes": [],
+          "failure_nodes": [],
+          "always_nodes": []
+        },
+        {
+          "name": "node3",
+          "identifier": "a9bc363a-defc-4f07-936f-7132c88384c5",
+          "unified_job_type": "job",
+          "unified_job_name": "aci_demo_remove_vrf",
+          "success_nodes": [
+            "node1"
+          ],
+          "failure_nodes": [],
+          "always_nodes": []
+        }
+      ],
+      "schedules": [],
+      "labels": [],
+      "roles": [
+        {
+          "name": "Admin",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Execute",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Read",
+          "user": [],
+          "team": []
+        },
+        {
+          "name": "Approve",
+          "user": [],
+          "team": []
+        }
+      ]
+    }
+  }
+
+]
