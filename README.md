@@ -6,7 +6,7 @@ https://sandboxapicdc.cisco.com/
 
 username: admin
 
-password: ciscopsdt
+password: !v3G@!4@Y
 
 I have created Ansible playbooks to create, get, and remove tenant, epg, vrf and bridge domains to execute
 against Cisco DevNets Cisco ACI.
