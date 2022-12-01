@@ -10,6 +10,7 @@
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
+        validate_certs: no
         vrf: rh_vrf_demo
         tenant: 00_RH_ANSIBLE_TENANT_DEMO
         descr: rh_vrf_demo
