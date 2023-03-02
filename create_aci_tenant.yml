@@ -13,4 +13,5 @@
         validate_certs: no
         tenant: 00_RH_ANSIBLE_TENANT_DEMO
         description: RH_Ansible_Demo
+        timeout: 600
         state: present
