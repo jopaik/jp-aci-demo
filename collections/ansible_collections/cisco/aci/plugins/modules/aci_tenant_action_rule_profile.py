@@ -4,13 +4,12 @@
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'certified'}
+ANSIBLE_METADATA = {"metadata_version": "1.1", "status": ["preview"], "supported_by": "certified"}
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: aci_tenant_action_rule_profile
 short_description: Manage action rule profiles (rtctrl:AttrP)
@@ -45,6 +44,7 @@ options:
     type: str
 extends_documentation_fragment:
 - cisco.aci.aci
+- cisco.aci.annotation
 
 notes:
 - The C(tenant) used must exist before using this module in your playbook.
@@ -56,21 +56,51 @@ seealso:
   link: https://developer.cisco.com/docs/apic-mim-ref/
 author:
 - Dag Wieers (@dagwieers)
-'''
+"""
 
-# FIXME: Add more, better examples
-EXAMPLES = r'''
-- cisco.aci.aci_tenant_action_rule_profile:
+EXAMPLES = r"""
+- name: Create a action rule profile
+  cisco.aci.aci_tenant_action_rule_profile:
     host: apic
     username: admin
     password: SomeSecretPassword
-    action_rule: '{{ action_rule }}'
-    description: '{{ descr }}'
-    tenant: '{{ tenant }}'
+    action_rule: my_action_rule
+    tenant: prod
+    state: present
   delegate_to: localhost
-'''
 
-RETURN = r'''
+- name: Delete a action rule profile
+  cisco.aci.aci_tenant_action_rule_profile:
+    host: apic
+    username: admin
+    password: SomeSecretPassword
+    action_rule: my_action_rule
+    tenant: prod
+    state: absent
+  delegate_to: localhost
+
+- name: Query all action rule profiles
+  cisco.aci.aci_tenant_action_rule_profile:
+    host: apic
+    username: admin
+    password: SomeSecretPassword
+    state: query
+  delegate_to: localhost
+  register: query_result
+
+- name: Query a specific action rule profile
+  cisco.aci.aci_tenant_action_rule_profile:
+    host: apic
+    username: admin
+    password: SomeSecretPassword
+    action_rule: my_action_rule
+    tenant: prod
+    state: query
+  delegate_to: localhost
+  register: query_result
+"""
+
+RETURN = r"""
 current:
   description: The existing configuration from the APIC after the module has finished
   returned: success
@@ -173,58 +203,59 @@ url:
   returned: failure or debug
   type: str
   sample: https://10.11.12.13/api/mo/uni/tn-production.json
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.aci.plugins.module_utils.aci import ACIModule, aci_argument_spec
+from ansible_collections.cisco.aci.plugins.module_utils.aci import ACIModule, aci_argument_spec, aci_annotation_spec
 
 
 def main():
     argument_spec = aci_argument_spec()
+    argument_spec.update(aci_annotation_spec())
     argument_spec.update(
-        action_rule=dict(type='str', aliases=['action_rule_name', 'name']),  # Not required for querying all objects
-        tenant=dict(type='str', aliases=['tenant_name']),  # Not required for querying all objects
-        description=dict(type='str', aliases=['descr']),
-        state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
-        name_alias=dict(type='str'),
+        action_rule=dict(type="str", aliases=["action_rule_name", "name"]),  # Not required for querying all objects
+        tenant=dict(type="str", aliases=["tenant_name"]),  # Not required for querying all objects
+        description=dict(type="str", aliases=["descr"]),
+        state=dict(type="str", default="present", choices=["absent", "present", "query"]),
+        name_alias=dict(type="str"),
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[
-            ['state', 'absent', ['action_rule', 'tenant']],
-            ['state', 'present', ['action_rule', 'tenant']],
+            ["state", "absent", ["action_rule", "tenant"]],
+            ["state", "present", ["action_rule", "tenant"]],
         ],
     )
 
-    action_rule = module.params.get('action_rule')
-    description = module.params.get('description')
-    state = module.params.get('state')
-    tenant = module.params.get('tenant')
-    name_alias = module.params.get('name_alias')
+    action_rule = module.params.get("action_rule")
+    description = module.params.get("description")
+    state = module.params.get("state")
+    tenant = module.params.get("tenant")
+    name_alias = module.params.get("name_alias")
 
     aci = ACIModule(module)
     aci.construct_url(
         root_class=dict(
-            aci_class='fvTenant',
-            aci_rn='tn-{0}'.format(tenant),
+            aci_class="fvTenant",
+            aci_rn="tn-{0}".format(tenant),
             module_object=tenant,
-            target_filter={'name': tenant},
+            target_filter={"name": tenant},
         ),
         subclass_1=dict(
-            aci_class='rtctrlAttrP',
-            aci_rn='attr-{0}'.format(action_rule),
+            aci_class="rtctrlAttrP",
+            aci_rn="attr-{0}".format(action_rule),
             module_object=action_rule,
-            target_filter={'name': action_rule},
+            target_filter={"name": action_rule},
         ),
     )
 
     aci.get_existing()
 
-    if state == 'present':
+    if state == "present":
         aci.payload(
-            aci_class='rtctrlAttrP',
+            aci_class="rtctrlAttrP",
             class_config=dict(
                 name=action_rule,
                 descr=description,
@@ -232,11 +263,11 @@ def main():
             ),
         )
 
-        aci.get_diff(aci_class='rtctrlAttrP')
+        aci.get_diff(aci_class="rtctrlAttrP")
 
         aci.post_config()
 
-    elif state == 'absent':
+    elif state == "absent":
         aci.delete_config()
 
     aci.exit_json()

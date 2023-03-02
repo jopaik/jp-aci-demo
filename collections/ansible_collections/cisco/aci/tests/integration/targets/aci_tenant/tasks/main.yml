@@ -9,6 +9,23 @@
     msg: 'Please define the following variables: aci_hostname, aci_username and aci_password.'
   when: aci_hostname is not defined or aci_username is not defined or aci_password is not defined
 
+- name: Delete old log files to clean test directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ ansible_host }}_cm_add_tenant.json"
+  - "{{ ansible_host }}_nm_add_tenant.json"
+  - "{{ ansible_host }}_cm_add_tenant_again.json"
+  - "{{ ansible_host }}_nm_add_tenant_again.json"
+  - "{{ ansible_host }}_cm_add_tenant_descr.json"
+  - "{{ ansible_host }}_nm_add_tenant_descr.json"
+  - "{{ ansible_host }}_cm_add_tenant_descr_again.json"
+  - "{{ ansible_host }}_nm_add_tenant_descr_again.json"
+  - "{{ ansible_host }}_cm_remove_tenant.json"
+  - "{{ ansible_host }}_nm_remove_tenant.json"
+  - "{{ ansible_host }}_cm_remove_tenant_again.json"
+  - "{{ ansible_host }}_nm_remove_tenant_again.json"
 
 # CLEAN ENVIRONMENT
 - name: Remove tenant
@@ -39,21 +56,54 @@
     annotation: ansible_test
     owner_key: ansible_key
     owner_tag: ansible_tag
+    output_path: "{{ ansible_host }}_cm_add_tenant.json"
   check_mode: yes
   register: cm_add_tenant
 
+- name: Dump content of files
+  debug:
+    msg: "{{ lookup('file', ansible_host +'_cm_add_tenant.json')}}"
+
 - name: Add tenant (normal mode)
-  cisco.aci.aci_tenant: *tenant_present
+  cisco.aci.aci_tenant:
+    <<: *tenant_present
+    output_path: "{{ ansible_host }}_nm_add_tenant.json"
   register: nm_add_tenant
 
 - name: Add tenant again (check_mode)
-  cisco.aci.aci_tenant: *tenant_present
+  cisco.aci.aci_tenant:
+    <<: *tenant_present
+    output_path: "{{ ansible_host }}_cm_add_tenant_again.json"
   check_mode: yes
   register: cm_add_tenant_again
 
 - name: Add tenant again (normal mode)
-  cisco.aci.aci_tenant: *tenant_present
+  cisco.aci.aci_tenant:
+    <<: *tenant_present
+    output_path: "{{ ansible_host }}_nm_add_tenant_again.json"
   register: nm_add_tenant_again
+
+- name: Dump content of files
+  debug:
+    msg: "{{ lookup('file', ansible_host + '_cm_add_tenant.json')}}"
+
+
+- name: Store file content on variables for create object
+  set_fact:
+    fc_cm_add_tenant: "{{ lookup('file', ansible_host + '_cm_add_tenant.json') | from_json }}"
+    fc_nm_add_tenant: "{{ lookup('file', ansible_host + '_nm_add_tenant.json') | from_json }}"
+    fc_cm_add_tenant_again: "{{ lookup('file', ansible_host + '_cm_add_tenant_again.json') }}"
+    fc_nm_add_tenant_again: "{{ lookup('file', ansible_host + '_nm_add_tenant_again.json') }}"
+
+- name: Log file content verification for create object
+  assert:
+    that:
+    - fc_cm_add_tenant.0.fvTenant.attributes.name == 'ansible_test'
+    - fc_cm_add_tenant.0.fvTenant.attributes.dn == 'uni/tn-ansible_test'
+    - fc_nm_add_tenant.0.fvTenant.attributes.name == 'ansible_test'
+    - fc_nm_add_tenant.0.fvTenant.attributes.dn == 'uni/tn-ansible_test'
+    - fc_cm_add_tenant_again == ''
+    - fc_nm_add_tenant_again == ''
 
 - name: Verify add_tenant
   assert:
@@ -78,6 +128,7 @@
     annotation: ansible_test_changed
     owner_key: ansible_key_changed
     owner_tag: ansible_tag_changed
+    output_path: "{{ ansible_host }}_cm_add_tenant_descr.json"
   check_mode: yes
   register: cm_add_tenant_descr
 
@@ -88,6 +139,7 @@
     annotation: ansible_test_changed
     owner_key: ansible_key_changed
     owner_tag: ansible_tag_changed
+    output_path: "{{ ansible_host }}_nm_add_tenant_descr.json"
   register: nm_add_tenant_descr
 
 - name: Change description and annotation/owner_tag/owner_key of tenant again (check_mode)
@@ -97,6 +149,7 @@
     annotation: ansible_test_changed
     owner_key: ansible_key_changed
     owner_tag: ansible_tag_changed
+    output_path: "{{ ansible_host }}_cm_add_tenant_descr_again.json"
   check_mode: yes
   register: cm_add_tenant_descr_again
 
@@ -107,7 +160,23 @@
     annotation: ansible_test_changed
     owner_key: ansible_key_changed
     owner_tag: ansible_tag_changed
+    output_path: "{{ ansible_host }}_nm_add_tenant_descr_again.json"
   register: nm_add_tenant_descr_again
+
+- name: Store file content on variables for update object
+  set_fact:
+    fc_cm_add_tenant_descr: "{{ lookup('file', ansible_host + '_cm_add_tenant_descr.json') | from_json }}"
+    fc_nm_add_tenant_descr: "{{ lookup('file', ansible_host + '_nm_add_tenant_descr.json') | from_json }}"
+    fc_cm_add_tenant_descr_again: "{{ lookup('file', ansible_host + '_cm_add_tenant_descr_again.json') }}"
+    fc_nm_add_tenant_descr_again: "{{ lookup('file', ansible_host + '_nm_add_tenant_descr_again.json') }}"
+
+- name: Log file content verification for update object
+  assert:
+    that:
+    - fc_cm_add_tenant_descr.0.fvTenant.attributes.descr == 'Ansible test tenant'
+    - fc_nm_add_tenant_descr.0.fvTenant.attributes.descr == 'Ansible test tenant'
+    - fc_cm_add_tenant_descr_again == ''
+    - fc_nm_add_tenant_descr_again == ''
 
 - name: Verify add_tenant_descr
   assert:
@@ -210,24 +279,60 @@
     - cm_query_tenant.current[0].fvTenant.attributes.ownerTag == 'ansible_tag_changed'
 
 
+- name: Update tenant with default annotation
+  cisco.aci.aci_tenant:
+    <<: *tenant_present
+    annotation: "{{ fake_var | default(omit) }}"
+  register: default_annotation
+
+- name: Assertion check for update tenant with default annotation
+  assert:
+    that:
+    - default_annotation is changed
+    - default_annotation.current.0.fvTenant.attributes.annotation == 'orchestrator:ansible'
+
 # REMOVE TENANT
 - name: Remove tenant (check_mode)
-  cisco.aci.aci_tenant: *tenant_absent
+  cisco.aci.aci_tenant:
+    <<: *tenant_absent
+    output_path: "{{ ansible_host }}_cm_remove_tenant.json"
   check_mode: yes
   register: cm_remove_tenant
 
 - name: Remove tenant (normal mode)
-  cisco.aci.aci_tenant: *tenant_absent
+  cisco.aci.aci_tenant:
+    <<: *tenant_absent
+    output_path: "{{ ansible_host }}_nm_remove_tenant.json"
   register: nm_remove_tenant
 
 - name: Remove tenant again (check_mode)
-  cisco.aci.aci_tenant: *tenant_absent
+  cisco.aci.aci_tenant:
+    <<: *tenant_absent
+    output_path: "{{ ansible_host }}_cm_remove_tenant_again.json"
   check_mode: yes
   register: cm_remove_tenant_again
 
 - name: Remove tenant again (normal mode)
-  cisco.aci.aci_tenant: *tenant_absent
+  cisco.aci.aci_tenant:
+    <<: *tenant_absent
+    output_path: "{{ ansible_host }}_nm_remove_tenant_again.json"
   register: nm_remove_tenant_again
+
+- name: Store file content on variables for delete object
+  set_fact:
+    fc_cm_remove_tenant: "{{ lookup('file', ansible_host + '_cm_remove_tenant.json') | from_json }}"
+    fc_nm_remove_tenant: "{{ lookup('file', ansible_host + '_nm_remove_tenant.json') | from_json }}"
+    fc_cm_remove_tenant_again: "{{ lookup('file', ansible_host + '_cm_remove_tenant_again.json') }}"
+    fc_nm_remove_tenant_again: "{{ lookup('file', ansible_host + '_nm_remove_tenant_again.json') }}"
+
+- name: Log file content verification for delete object
+  assert:
+    that:
+    - fc_cm_remove_tenant.0.fvTenant.attributes.status == 'deleted'
+    - fc_cm_remove_tenant.0.fvTenant.attributes.dn == 'uni/tn-ansible_test'
+    - fc_nm_remove_tenant == [{}]
+    - fc_cm_remove_tenant_again == ''
+    - fc_nm_remove_tenant_again == ''
 
 - name: Verify remove_tenant
   assert:

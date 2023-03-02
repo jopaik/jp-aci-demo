@@ -3,15 +3,12 @@
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
+ANSIBLE_METADATA = {"metadata_version": "1.1", "status": ["preview"], "supported_by": "community"}
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: aci_maintenance_group_node
 short_description: Manage maintenance group nodes
@@ -40,34 +37,55 @@ options:
     type: str
 extends_documentation_fragment:
 - cisco.aci.aci
+- cisco.aci.annotation
 
 author:
 - Steven Gerhart (@sgerhart)
-'''
+"""
 
-EXAMPLES = r'''
-- name: maintenance group
+EXAMPLES = r"""
+- name: Create a maintenance group node
   cisco.aci.aci_maintenance_group_node:
-    host: "{{ inventory_hostname }}"
-    username: "{{ user }}"
-    password: "{{ pass }}"
-    validate_certs: no
-    group: maintenancegrp1
+    host: apic
+    username: admin
+    password: SomeSecretPassword
+    group: my_maintenance_group
     node: 1001
     state: present
+  delegate_to: localhost
 
-- name: maintenance group
+- name: Delete a maintenance group node
   cisco.aci.aci_maintenance_group_node:
-    host: "{{ inventory_hostname }}"
-    username: "{{ user }}"
-    password: "{{ pass }}"
-    validate_certs: no
-    group: maintenancegrp1
-    node: 1002
+    host: apic
+    username: admin
+    password: SomeSecretPassword
+    group: my_maintenance_group
+    node: 1001
     state: absent
-'''
+  delegate_to: localhost
 
-RETURN = r'''
+- name: Query all maintenance group nodes
+  cisco.aci.aci_maintenance_group_node:
+    host: apic
+    username: admin
+    password: SomeSecretPassword
+    state: query
+  delegate_to: localhost
+  register: query_result
+
+- name: Query a maintenance group node
+  cisco.aci.aci_maintenance_group_node:
+    host: apic
+    username: admin
+    password: SomeSecretPassword
+    group: my_maintenance_group
+    node: 1001
+    state: query
+  delegate_to: localhost
+  register: query_result
+"""
+
+RETURN = r"""
 current:
   description: The existing configuration from the APIC after the module has finished
   returned: success
@@ -171,56 +189,57 @@ url:
   type: str
   sample: https://10.11.12.13/api/mo/uni/tn-production.json
 
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.aci.plugins.module_utils.aci import ACIModule, aci_argument_spec
+from ansible_collections.cisco.aci.plugins.module_utils.aci import ACIModule, aci_argument_spec, aci_annotation_spec
 
 
 def main():
     argument_spec = aci_argument_spec()
+    argument_spec.update(aci_annotation_spec())
     argument_spec.update(
-        group=dict(type='str'),  # Not required for querying all objects
-        node=dict(type='str'),
-        state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
-        name_alias=dict(type='str'),
+        group=dict(type="str"),  # Not required for querying all objects
+        node=dict(type="str"),
+        state=dict(type="str", default="present", choices=["absent", "present", "query"]),
+        name_alias=dict(type="str"),
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[
-            ['state', 'absent', ['node', 'group']],
-            ['state', 'present', ['node', 'group']],
+            ["state", "absent", ["node", "group"]],
+            ["state", "present", ["node", "group"]],
         ],
     )
 
-    state = module.params.get('state')
-    group = module.params.get('group')
-    node = module.params.get('node')
-    name_alias = module.params.get('name_alias')
+    state = module.params.get("state")
+    group = module.params.get("group")
+    node = module.params.get("node")
+    name_alias = module.params.get("name_alias")
 
     aci = ACIModule(module)
     aci.construct_url(
         root_class=dict(
-            aci_class='maintMaintGrp',
-            aci_rn='fabric/maintgrp-{0}'.format(group),
-            target_filter={'name': group},
+            aci_class="maintMaintGrp",
+            aci_rn="fabric/maintgrp-{0}".format(group),
+            target_filter={"name": group},
             module_object=group,
         ),
         subclass_1=dict(
-            aci_class='fabricNodeBlk',
-            aci_rn='nodeblk-blk{0}-{0}'.format(node),
-            target_filter={'name': 'blk{0}-{0}'.format(node)},
+            aci_class="fabricNodeBlk",
+            aci_rn="nodeblk-blk{0}-{0}".format(node),
+            target_filter={"name": "blk{0}-{0}".format(node)},
             module_object=node,
         ),
     )
 
     aci.get_existing()
 
-    if state == 'present':
+    if state == "present":
         aci.payload(
-            aci_class='fabricNodeBlk',
+            aci_class="fabricNodeBlk",
             class_config=dict(
                 from_=node,
                 to_=node,
@@ -228,11 +247,11 @@ def main():
             ),
         )
 
-        aci.get_diff(aci_class='fabricNodeBlk')
+        aci.get_diff(aci_class="fabricNodeBlk")
 
         aci.post_config()
 
-    elif state == 'absent':
+    elif state == "absent":
         aci.delete_config()
 
     aci.exit_json()

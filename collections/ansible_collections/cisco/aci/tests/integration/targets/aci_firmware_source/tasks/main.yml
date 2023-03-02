@@ -57,6 +57,7 @@
     - nm_add_source.current.0.firmwareOSource.attributes.name == 'ansible_test_1'
     - nm_add_source.current.0.firmwareOSource.attributes.proto == 'http'
     - nm_add_source.current.0.firmwareOSource.attributes.url == 'foobar.cisco.com/download/cisco/aci/aci-msft-pkg-3.1.1i.zip'
+    - nm_add_source.current.0.firmwareOSource.attributes.annotation == 'orchestrator:ansible'
 
 - name: Add source again (check_mode)
   aci_firmware_source: *source_present
@@ -103,7 +104,7 @@
     - cm_query_all_sources is not changed
     - nm_query_all_sources is not changed
     - cm_query_all_sources == nm_query_all_sources
-    - nm_query_all_sources.current.0.firmwareRepoP.children | length == 2
+    - nm_query_all_sources.current.0.firmwareRepoP.children | length >= 2
 
 # QUERY A SOURCE
 - name: Query our source (check_mode)

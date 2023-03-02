@@ -5,13 +5,12 @@
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'certified'}
+ANSIBLE_METADATA = {"metadata_version": "1.1", "status": ["preview"], "supported_by": "certified"}
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: aci_interface_policy_link_level
 short_description: Manage Link Level interface policies (fabric:HIfPol)
@@ -61,18 +60,22 @@ options:
     type: str
     choices: [ absent, present, query ]
     default: present
-extends_documentation_fragment: cisco.aci.aci
+extends_documentation_fragment:
+- cisco.aci.aci
+- cisco.aci.annotation
+- cisco.aci.owner
+
 seealso:
 - name: APIC Management Information Model reference
   description: More information about the internal APIC class B(fabric:HIfPol).
   link: https://developer.cisco.com/docs/apic-mim-ref/
 author:
 - Vasily Prokopov (@vasilyprokopov)
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Add a Link Level Policy
-  aci_interface_policy_link_level:
+  cisco.aci.aci_interface_policy_link_level:
     host: apic
     username: admin
     password: SomeSecretPassword
@@ -86,7 +89,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a Link Level Policy
-  aci_interface_policy_link_level:
+  cisco.aci.aci_interface_policy_link_level:
     host: apic
     username: admin
     password: SomeSecretPassword
@@ -94,7 +97,7 @@ EXAMPLES = r'''
     state: absent
 
 - name: Query a Link Level Policy
-  aci_interface_policy_link_level:
+  cisco.aci.aci_interface_policy_link_level:
     host: apic
     username: admin
     password: SomeSecretPassword
@@ -103,15 +106,15 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Query all Link Level Policies
-  aci_interface_policy_link_level:
+  cisco.aci.aci_interface_policy_link_level:
     host: apic
     username: admin
     password: SomeSecretPassword
     state: query
   delegate_to: localhost
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 current:
   description: The existing configuration from the APIC after the module has finished
   returned: success
@@ -214,60 +217,63 @@ url:
   returned: failure or debug
   type: str
   sample: https://10.11.12.13/api/mo/uni/tn-production.json
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.aci.plugins.module_utils.aci import ACIModule, aci_argument_spec
+from ansible_collections.cisco.aci.plugins.module_utils.aci import ACIModule, aci_argument_spec, aci_annotation_spec, aci_owner_spec
 
 
 def main():
     argument_spec = aci_argument_spec()
+    argument_spec.update(aci_annotation_spec())
+    argument_spec.update(aci_owner_spec())
     argument_spec.update(
-        link_level_policy=dict(type='str', aliases=['name']),
-        description=dict(type='str', aliases=['descr']),
-        auto_negotiation=dict(type='bool', default='true'),
-        speed=dict(type='str', default='inherit', choices=['100M', '1G', '10G', '25G', '40G', '50G', '100G', '200G', '400G', 'inherit']),
-        link_debounce_interval=dict(type='int', default='100'),
-        forwarding_error_correction=dict(type='str', default='inherit',
-                                         choices=['inherit', 'kp-fec', 'cl91-rs-fec', 'cl74-fc-fec', 'disable-fec', 'ieee-rs-fec', 'cons16-rs-fec']),
-        state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
+        link_level_policy=dict(type="str", aliases=["name"]),
+        description=dict(type="str", aliases=["descr"]),
+        auto_negotiation=dict(type="bool", default="true"),
+        speed=dict(type="str", default="inherit", choices=["100M", "1G", "10G", "25G", "40G", "50G", "100G", "200G", "400G", "inherit"]),
+        link_debounce_interval=dict(type="int", default="100"),
+        forwarding_error_correction=dict(
+            type="str", default="inherit", choices=["inherit", "kp-fec", "cl91-rs-fec", "cl74-fc-fec", "disable-fec", "ieee-rs-fec", "cons16-rs-fec"]
+        ),
+        state=dict(type="str", default="present", choices=["absent", "present", "query"]),
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[
-            ['state', 'absent', ['link_level_policy']],
-            ['state', 'present', ['link_level_policy']],
+            ["state", "absent", ["link_level_policy"]],
+            ["state", "present", ["link_level_policy"]],
         ],
     )
 
     aci = ACIModule(module)
 
-    link_level_policy = module.params['link_level_policy']
-    description = module.params['description']
-    auto_negotiation = aci.boolean(module.params['auto_negotiation'], 'on', 'off')
-    speed = module.params['speed']
-    link_debounce_interval = module.params['link_debounce_interval']
+    link_level_policy = module.params["link_level_policy"]
+    description = module.params["description"]
+    auto_negotiation = aci.boolean(module.params["auto_negotiation"], "on", "off")
+    speed = module.params["speed"]
+    link_debounce_interval = module.params["link_debounce_interval"]
     if link_debounce_interval is not None and link_debounce_interval not in range(0, 5001):
         module.fail_json(msg='The "link_debounce_interval" must be a value between 0 and 5000')
-    forwarding_error_correction = module.params['forwarding_error_correction']
-    state = module.params['state']
+    forwarding_error_correction = module.params["forwarding_error_correction"]
+    state = module.params["state"]
 
     aci.construct_url(
         root_class=dict(
-            aci_class='fabricHIfPol',
-            aci_rn='infra/hintfpol-{0}'.format(link_level_policy),
+            aci_class="fabricHIfPol",
+            aci_rn="infra/hintfpol-{0}".format(link_level_policy),
             module_object=link_level_policy,
-            target_filter={'name': link_level_policy},
+            target_filter={"name": link_level_policy},
         ),
     )
 
     aci.get_existing()
 
-    if state == 'present':
+    if state == "present":
         aci.payload(
-            aci_class='fabricHIfPol',
+            aci_class="fabricHIfPol",
             class_config=dict(
                 name=link_level_policy,
                 descr=description,
@@ -278,11 +284,11 @@ def main():
             ),
         )
 
-        aci.get_diff(aci_class='fabricHIfPol')
+        aci.get_diff(aci_class="fabricHIfPol")
 
         aci.post_config()
 
-    elif state == 'absent':
+    elif state == "absent":
         aci.delete_config()
 
     aci.exit_json()

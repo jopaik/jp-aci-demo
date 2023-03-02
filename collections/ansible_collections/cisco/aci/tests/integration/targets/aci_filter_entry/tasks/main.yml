@@ -8,28 +8,28 @@
     msg: 'Please define the following variables: aci_hostname, aci_username and aci_password.'
   when: aci_hostname is not defined or aci_username is not defined or aci_password is not defined
 
+# CLEAN ENVIRONMENT
+- name: Set vars
+  set_fact:
+    aci_info: &aci_info
+      host: "{{ aci_hostname }}"
+      username: "{{ aci_username }}"
+      password: "{{ aci_password }}"
+      validate_certs: '{{ aci_validate_certs | default(false) }}'
+      use_ssl: '{{ aci_use_ssl | default(true) }}'
+      use_proxy: '{{ aci_use_proxy | default(true) }}'
+      output_level: '{{ aci_output_level | default("debug") }}'
+
 - name: ensure tenant exists for tests to kick off
   cisco.aci.aci_tenant:
-    host: "{{ aci_hostname }}"
-    username: "{{ aci_username }}"
-    password: "{{ aci_password }}"
-    validate_certs: '{{ aci_validate_certs | default(false) }}'
-    use_ssl: '{{ aci_use_ssl | default(true) }}'
-    use_proxy: '{{ aci_use_proxy | default(true) }}'
-    output_level: '{{ aci_output_level | default("info") }}'
-    tenant: anstest
+    <<: *aci_info
+    tenant: ansible_test
     state: absent
 
 - name: ensure tenant exists for tests to kick off
   cisco.aci.aci_tenant: &aci_tenant_present
-    host: "{{ aci_hostname }}"
-    username: "{{ aci_username }}"
-    password: "{{ aci_password }}"
-    validate_certs: '{{ aci_validate_certs | default(false) }}'
-    use_ssl: '{{ aci_use_ssl | default(true) }}'
-    use_proxy: '{{ aci_use_proxy | default(true) }}'
-    output_level: debug
-    tenant: anstest
+    <<: *aci_info
+    tenant: ansible_test
     state: present
   register: tenant_present
 
@@ -69,13 +69,17 @@
     dst_port_end: 90
   register: entry_present_update
 
+- name: Verify Cloud and Non-Cloud Sites in use.
+  include_tasks: ../../../../../../integration/targets/aci_cloud_provider/tasks/main.yml
+
 - name: create filter entry - test different types
   cisco.aci.aci_filter_entry:
     <<: *aci_filter_present
     entry: anstest2
     ether_type: arp
     arp_flag: arp_reply
-  register: entry_present_2
+  register: entry_present_2 
+  when: query_cloud.current == []  # This condition will skip execution for cloud sites
 
 - name: create filter entry - test different types
   cisco.aci.aci_filter_entry:
@@ -120,6 +124,7 @@
       - entry_present_check_mode.sent.vzEntry.attributes.name == 'anstest'
       - entry_present_check_mode.sent.vzEntry.attributes.prot == 'tcp'
       - entry_present is changed
+      - entry_present.current.0.vzEntry.attributes.annotation == 'orchestrator:ansible'
       - entry_present.previous == []
       - entry_present.sent == entry_present_check_mode.sent
       - entry_present_idempotent is not changed
@@ -128,10 +133,6 @@
       - entry_present_update is changed
       - entry_present_update.previous != []
       - entry_present_update.sent != entry_present_update.proposed
-      - entry_present_2 is changed
-      - entry_present_2.sent.vzEntry.attributes.arpOpc == 'reply'
-      - entry_present_2.sent.vzEntry.attributes.etherT == 'arp'
-      - entry_present_2.sent.vzEntry.attributes.name == 'anstest2'
       - entry_present_3 is changed
       - entry_present_3.sent.vzEntry.attributes.etherT == 'ip'
       - entry_present_3.sent.vzEntry.attributes.icmpv4T == 'echo'
@@ -147,6 +148,15 @@
       - 'present_missing_param.msg == "state is present but all of the following are missing: entry"'
       - present_incompatible_params is failed
       - present_incompatible_params.msg.startswith("Parameter")
+
+- name: present assertions for arp
+  assert:
+    that:
+      - entry_present_2 is changed
+      - entry_present_2.sent.vzEntry.attributes.arpOpc == 'reply'
+      - entry_present_2.sent.vzEntry.attributes.etherT == 'arp'
+      - entry_present_2.sent.vzEntry.attributes.name == 'anstest2'
+  when: query_cloud.current == []  # This condition will skip execution for cloud sites
 
 - name: query tenant filter entry
   cisco.aci.aci_filter_entry: &aci_query_entry
@@ -199,13 +209,13 @@
     entry: "{{ fakevar | default(omit) }}"
   register: query_all
 
-- name: query assertions
+- name: query assertions for all
   assert:
     that:
       - query_tenant_filter_entry is not changed
       - query_tenant_filter_entry.current | length == 1
       - query_tenant_filter_entry.current.0.vzEntry.attributes.name == "anstest"
-      - '"tn-anstest/flt-anstest/e-anstest.json" in query_tenant_filter_entry.url'
+      - '"tn-ansible_test/flt-anstest/e-anstest.json" in query_tenant_filter_entry.url'
       - query_filter_entry is not changed
       - query_filter_entry.current.0.vzFilter.attributes.name == "anstest"
       - query_filter_entry.current.0.vzFilter.children | length == 1
@@ -214,16 +224,15 @@
       - '"class/vzFilter.json" in query_filter_entry.url'
       - query_tenant_entry is not changed
       - query_tenant_entry.current | length == 1
-      - query_tenant_entry.current.0.fvTenant.attributes.name == "anstest"
+      - query_tenant_entry.current.0.fvTenant.attributes.name == "ansible_test"
       - '"rsp-subtree-filter=eq(vzEntry.name,\"anstest\")" in query_tenant_entry.filter_string'
       - '"rsp-subtree-class=vzEntry" in query_tenant_entry.filter_string'
-      - '"tn-anstest.json" in query_tenant_entry.url'
+      - '"tn-ansible_test.json" in query_tenant_entry.url'
       - query_tenant_filter is not changed
       - query_tenant_filter.current | length == 1
       - query_tenant_filter.current.0.vzFilter.attributes.name == "anstest"
-      - query_tenant_filter.current.0.vzFilter.children | length == 4
       - '"rsp-subtree-class=vzEntry" in query_tenant_filter.filter_string'
-      - '"tn-anstest/flt-anstest.json" in query_tenant_filter.url'
+      - '"tn-ansible_test/flt-anstest.json" in query_tenant_filter.url'
       - query_entry is not changed
       - query_entry.current.0.vzEntry.attributes.name == "anstest"
       - '"query-target-filter=eq(vzEntry.name,\"anstest\")" in query_entry.filter_string'
@@ -235,13 +244,20 @@
       - '"class/vzFilter.json" in query_filter.url'
       - query_tenant is not changed
       - query_tenant.current | length == 1
-      - query_tenant.current.0.fvTenant.attributes.name == "anstest"
+      - query_tenant.current.0.fvTenant.attributes.name == "ansible_test"
       - '"rsp-subtree-class=vzEntry,vzFilter" in query_tenant.filter_string'
-      - '"tn-anstest.json" in query_tenant.url'
+      - '"tn-ansible_test.json" in query_tenant.url'
       - query_all is not changed
       - query_all.current | length > 1
       - query_all.current.0.vzEntry is defined
       - '"class/vzEntry.json" in query_all.url'
+
+
+- name: query assertions for only Non-Cloud
+  assert:
+    that:
+      - query_tenant_filter.current.0.vzFilter.children | length == 4
+  when: query_cloud.current == []  # This condition will skip execution for cloud sites
 
 - name: delete entry - check mode works
   cisco.aci.aci_filter_entry: &aci_entry_absent
