@@ -1,10 +1,8 @@
 ---
 - name: ACI Demo Create Tenant via vpn
   hosts: vpn
-  connection: local
-  gather_facts: no
+  gather_facts: false
 
   tasks:
     - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO via VPN
       ansible.builtin.command: pwd
-      delegate_to: vpn
