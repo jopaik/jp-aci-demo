@@ -1,8 +1,17 @@
 ---
-- name: ACI Demo Create Tenant via vpn
-  hosts: vpn
-  gather_facts: false
+- name: ACI Demo Create Tenant
+  hosts: aci
+  gather_facts: no
 
   tasks:
-    - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO via VPN
-      ansible.builtin.command: ansible-playbook /home/ansible/git/jp-aci-demo/create_aci_tenant.yml
+    - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO
+      cisco.aci.aci_tenant:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        description: RH_Ansible_Demo
+        timeout: 600
+        state: present
+      delegate_to: "{{ aap_controller }}"
