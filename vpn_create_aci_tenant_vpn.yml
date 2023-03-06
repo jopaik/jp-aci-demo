@@ -6,4 +6,4 @@
 
   tasks:
     - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO via VPN
-      ansible.builtin.command: ansible-playbook /home/ansible/git/jp-aci-demo/create_aci_tenant.yml
+      ansible.builtin.command: pwd
