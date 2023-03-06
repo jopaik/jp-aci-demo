@@ -10,7 +10,7 @@
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
-        validate_certs: no
+        validate_certs: false
         tenant: "{{ item.name }}"
         description: "{{ item.desc }}"
         timeout: 600
