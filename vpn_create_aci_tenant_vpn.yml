@@ -1,0 +1,18 @@
+---
+- name: ACI Demo Create Tenant
+  hosts: aci
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO
+      cisco.aci.aci_tenant:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        description: RH_Ansible_Demo
+        timeout: 600
+        state: present
+      delegate_to: {{ aap_controller }}
