@@ -2,7 +2,7 @@
 - name: ACI Demo Create Tenant
   hosts: aci
   connection: local
-  gather_facts: no
+  gather_facts: false
 
   tasks:
     - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO
