@@ -19,4 +19,4 @@
   
    - name: Print output
      ansible.builtin.debug:
-        var: output.stdout_lines
+        var: output
