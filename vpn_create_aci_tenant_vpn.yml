@@ -1,7 +1,7 @@
 ---
 - name: ACI Demo Create Tenant
   hosts: aci
-  connection: local
+  connection: "{{ aap_controller }}"
   gather_facts: no
 
   tasks:
@@ -15,4 +15,4 @@
         description: RH_Ansible_Demo
         timeout: 600
         state: present
-      delegate_to: "{{ aap_controller }}"
+
