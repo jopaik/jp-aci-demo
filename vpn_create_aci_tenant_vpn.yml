@@ -15,4 +15,4 @@
         description: RH_Ansible_Demo
         timeout: 600
         state: present
-      delegate_to: {{ aap_controller }}
+      delegate_to: "{{ aap_controller }}"
