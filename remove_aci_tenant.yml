@@ -5,12 +5,15 @@
   gather_facts: no
 
   tasks:
-    - name: Remove ACI Tenant <ANSIBLE_TENANT>
-      cisco.aci.aci_tenant:
+       cisco.aci.aci_tenant:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
         validate_certs: no
-        tenant: 00_RH_ANSIBLE_TENANT_DEMO
-        description: Create by RH_Ansible!
+        tenant: "{{ item.name }}"
+        description: "{{ item.desc }}"
+        timeout: 600
         state: absent
+      loop:
+        - { name: 00_RH_ANSIBLE_TENANT_DEMO, desc: 00_Tenant_ACI }
+        - { name: 01_RH_ANSIBLE_TENANT_DEMO, desc: 01_Tenant_ACI }
