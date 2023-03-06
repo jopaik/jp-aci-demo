@@ -7,3 +7,4 @@
   tasks:
     - name: Create ACI Tenant RH_ANSIBLE_TENANT_DEMO via VPN
       ansible.builtin.command: pwd
+      delegate_to: vpn
