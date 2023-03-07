@@ -2,7 +2,7 @@
 - name: ACI Demo Remove Tenant
   hosts: aci
   connection: local
-  gather_facts: no
+  gather_facts: false
 
   tasks:
     - name: Remove ACI Tenant
@@ -13,8 +13,8 @@
         validate_certs: false
         tenant: "{{ item.name }}"
         description: "{{ item.desc }}"
-        timeout: 600
         state: absent
       loop:
         - { name: '00_RH_ANSIBLE_TENANT_DEMO', desc: '00_Tenant_ACI' }
         - { name: '01_RH_ANSIBLE_TENANT_DEMO', desc: '01_Tenant_ACI' }
+        
