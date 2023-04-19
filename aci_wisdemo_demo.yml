@@ -1,0 +1,44 @@
+---
+- name: Cisco ACI Ansible
+  hosts: routers
+  gather_facts: false
+
+  tasks:
+    - name: Create tenant
+      cisco.aci.aci_tenant:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        use_proxy: false
+        validate_certs: "{{ validate_certs }}"
+        tenant: "{{ tenant }}"
+        description: "{{ description }}"
+        state: present
+      register: tenant_present
+      loop:
+      - '{{ tenant_test }}'
+      
+    - name: Create vrf 
+      cisco.aci.aci_vrf:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        use_proxy: false
+        validate_certs: "{{ validate_certs }}"
+        tenant: "{{ tenant }}"
+        vrf: "{{ vrf }}"
+        state: "present"
+      register: vrf_present
+
+  
+   
+    - name: Create BD
+      cisco.aci.aci_bd:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        use_proxy: false
+        validate_certs: "{{ validate_certs }}"
+        bd: "{{ bd }}"
+        state: present
+      register: bd_present
