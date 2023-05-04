@@ -1,0 +1,349 @@
+{
+    "workflow_job_templates": [
+         {
+              "name": "aci_demo_workflow_main",
+              "description": "",
+              "extra_vars": "",
+              "survey_enabled": false,
+              "allow_simultaneous": false,
+              "ask_variables_on_launch": false,
+              "inventory": null,
+              "limit": null,
+              "scm_branch": null,
+              "ask_inventory_on_launch": false,
+              "ask_scm_branch_on_launch": false,
+              "ask_limit_on_launch": false,
+              "webhook_service": "",
+              "webhook_credential": null,
+              "ask_labels_on_launch": false,
+              "ask_skip_tags_on_launch": false,
+              "ask_tags_on_launch": false,
+              "skip_tags": null,
+              "job_tags": null,
+              "organization": {
+                   "name": "Default",
+                   "type": "organization"
+              },
+              "related": {
+                   "schedules": [],
+                   "workflow_nodes": [
+                        {
+                             "extra_data": {},
+                             "inventory": null,
+                             "scm_branch": null,
+                             "job_type": null,
+                             "job_tags": null,
+                             "skip_tags": null,
+                             "limit": null,
+                             "diff_mode": null,
+                             "verbosity": null,
+                             "execution_environment": null,
+                             "forks": null,
+                             "job_slice_count": null,
+                             "timeout": null,
+                             "all_parents_must_converge": false,
+                             "identifier": "60895473-5edc-4a9b-80d0-2b28d7016279",
+                             "workflow_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_main",
+                                  "type": "workflow_job_template"
+                             },
+                             "unified_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_create",
+                                  "type": "workflow_job_template"
+                             },
+                             "related": {
+                                  "credentials": [],
+                                  "success_nodes": [
+                                       {
+                                            "workflow_job_template": {
+                                                 "organization": {
+                                                      "name": "Default",
+                                                      "type": "organization"
+                                                 },
+                                                 "name": "aci_demo_workflow_main",
+                                                 "type": "workflow_job_template"
+                                            },
+                                            "identifier": "48a95e33-2f74-4d2b-9f2d-c721ff94c5cf",
+                                            "type": "workflow_job_template_node"
+                                       }
+                                  ],
+                                  "failure_nodes": [],
+                                  "always_nodes": []
+                             },
+                             "natural_key": {
+                                  "workflow_job_template": {
+                                       "organization": {
+                                            "name": "Default",
+                                            "type": "organization"
+                                       },
+                                       "name": "aci_demo_workflow_main",
+                                       "type": "workflow_job_template"
+                                  },
+                                  "identifier": "60895473-5edc-4a9b-80d0-2b28d7016279",
+                                  "type": "workflow_job_template_node"
+                             }
+                        },
+                        {
+                             "extra_data": {},
+                             "inventory": null,
+                             "scm_branch": null,
+                             "job_type": null,
+                             "job_tags": null,
+                             "skip_tags": null,
+                             "limit": null,
+                             "diff_mode": null,
+                             "verbosity": null,
+                             "execution_environment": null,
+                             "forks": null,
+                             "job_slice_count": null,
+                             "timeout": null,
+                             "all_parents_must_converge": false,
+                             "identifier": "390efd60-95c2-4873-905b-fa24af897e81",
+                             "workflow_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_main",
+                                  "type": "workflow_job_template"
+                             },
+                             "unified_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_get",
+                                  "type": "workflow_job_template"
+                             },
+                             "related": {
+                                  "credentials": [],
+                                  "success_nodes": [
+                                       {
+                                            "workflow_job_template": {
+                                                 "organization": {
+                                                      "name": "Default",
+                                                      "type": "organization"
+                                                 },
+                                                 "name": "aci_demo_workflow_main",
+                                                 "type": "workflow_job_template"
+                                            },
+                                            "identifier": "d00dbcd5-840e-4ade-bdc1-3d93f2cef719",
+                                            "type": "workflow_job_template_node"
+                                       }
+                                  ],
+                                  "failure_nodes": [],
+                                  "always_nodes": []
+                             },
+                             "natural_key": {
+                                  "workflow_job_template": {
+                                       "organization": {
+                                            "name": "Default",
+                                            "type": "organization"
+                                       },
+                                       "name": "aci_demo_workflow_main",
+                                       "type": "workflow_job_template"
+                                  },
+                                  "identifier": "390efd60-95c2-4873-905b-fa24af897e81",
+                                  "type": "workflow_job_template_node"
+                             }
+                        },
+                        {
+                             "extra_data": {},
+                             "inventory": null,
+                             "scm_branch": null,
+                             "job_type": null,
+                             "job_tags": null,
+                             "skip_tags": null,
+                             "limit": null,
+                             "diff_mode": null,
+                             "verbosity": null,
+                             "execution_environment": null,
+                             "forks": null,
+                             "job_slice_count": null,
+                             "timeout": null,
+                             "all_parents_must_converge": false,
+                             "identifier": "2aa486b7-6c93-401a-b054-a7e86c8c0cfe",
+                             "workflow_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_main",
+                                  "type": "workflow_job_template"
+                             },
+                             "unified_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_remove",
+                                  "type": "workflow_job_template"
+                             },
+                             "related": {
+                                  "credentials": [],
+                                  "success_nodes": [],
+                                  "failure_nodes": [],
+                                  "always_nodes": []
+                             },
+                             "natural_key": {
+                                  "workflow_job_template": {
+                                       "organization": {
+                                            "name": "Default",
+                                            "type": "organization"
+                                       },
+                                       "name": "aci_demo_workflow_main",
+                                       "type": "workflow_job_template"
+                                  },
+                                  "identifier": "2aa486b7-6c93-401a-b054-a7e86c8c0cfe",
+                                  "type": "workflow_job_template_node"
+                             }
+                        },
+                        {
+                             "extra_data": {},
+                             "inventory": null,
+                             "scm_branch": null,
+                             "job_type": null,
+                             "job_tags": null,
+                             "skip_tags": null,
+                             "limit": null,
+                             "diff_mode": null,
+                             "verbosity": null,
+                             "execution_environment": null,
+                             "forks": null,
+                             "job_slice_count": null,
+                             "timeout": null,
+                             "all_parents_must_converge": false,
+                             "identifier": "d00dbcd5-840e-4ade-bdc1-3d93f2cef719",
+                             "workflow_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_main",
+                                  "type": "workflow_job_template"
+                             },
+                             "related": {
+                                  "credentials": [],
+                                  "success_nodes": [
+                                       {
+                                            "workflow_job_template": {
+                                                 "organization": {
+                                                      "name": "Default",
+                                                      "type": "organization"
+                                                 },
+                                                 "name": "aci_demo_workflow_main",
+                                                 "type": "workflow_job_template"
+                                            },
+                                            "identifier": "2aa486b7-6c93-401a-b054-a7e86c8c0cfe",
+                                            "type": "workflow_job_template_node"
+                                       }
+                                  ],
+                                  "failure_nodes": [],
+                                  "always_nodes": [],
+                                  "create_approval_template": {
+                                       "timeout": 600,
+                                       "name": "Pause 2",
+                                       "description": ""
+                                  }
+                             },
+                             "natural_key": {
+                                  "workflow_job_template": {
+                                       "organization": {
+                                            "name": "Default",
+                                            "type": "organization"
+                                       },
+                                       "name": "aci_demo_workflow_main",
+                                       "type": "workflow_job_template"
+                                  },
+                                  "identifier": "d00dbcd5-840e-4ade-bdc1-3d93f2cef719",
+                                  "type": "workflow_job_template_node"
+                             }
+                        },
+                        {
+                             "extra_data": {},
+                             "inventory": null,
+                             "scm_branch": null,
+                             "job_type": null,
+                             "job_tags": null,
+                             "skip_tags": null,
+                             "limit": null,
+                             "diff_mode": null,
+                             "verbosity": null,
+                             "execution_environment": null,
+                             "forks": null,
+                             "job_slice_count": null,
+                             "timeout": null,
+                             "all_parents_must_converge": false,
+                             "identifier": "48a95e33-2f74-4d2b-9f2d-c721ff94c5cf",
+                             "workflow_job_template": {
+                                  "organization": {
+                                       "name": "Default",
+                                       "type": "organization"
+                                  },
+                                  "name": "aci_demo_workflow_main",
+                                  "type": "workflow_job_template"
+                             },
+                             "related": {
+                                  "credentials": [],
+                                  "success_nodes": [
+                                       {
+                                            "workflow_job_template": {
+                                                 "organization": {
+                                                      "name": "Default",
+                                                      "type": "organization"
+                                                 },
+                                                 "name": "aci_demo_workflow_main",
+                                                 "type": "workflow_job_template"
+                                            },
+                                            "identifier": "390efd60-95c2-4873-905b-fa24af897e81",
+                                            "type": "workflow_job_template_node"
+                                       }
+                                  ],
+                                  "failure_nodes": [],
+                                  "always_nodes": [],
+                                  "create_approval_template": {
+                                       "timeout": 600,
+                                       "name": "Pause",
+                                       "description": ""
+                                  }
+                             },
+                             "natural_key": {
+                                  "workflow_job_template": {
+                                       "organization": {
+                                            "name": "Default",
+                                            "type": "organization"
+                                       },
+                                       "name": "aci_demo_workflow_main",
+                                       "type": "workflow_job_template"
+                                  },
+                                  "identifier": "48a95e33-2f74-4d2b-9f2d-c721ff94c5cf",
+                                  "type": "workflow_job_template_node"
+                             }
+                        }
+                   ],
+                   "labels": [],
+                   "notification_templates_started": [],
+                   "notification_templates_success": [],
+                   "notification_templates_error": [],
+                   "notification_templates_approvals": [],
+                   "survey_spec": {}
+              },
+              "natural_key": {
+                   "organization": {
+                        "name": "Default",
+                        "type": "organization"
+                   },
+                   "name": "aci_demo_workflow_main",
+                   "type": "workflow_job_template"
+              }
+         }
+    ]
+}

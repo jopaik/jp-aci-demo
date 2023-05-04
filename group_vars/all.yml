@@ -5,3 +5,7 @@ jp_tenants_group_list:
   -
     name: '01_RH_ANSIBLE_TENANT_DEMO'
     desc: '01_RedHat_Tenant_ACI'
+
+jp_tenant_00_bd_list:
+  -
+    rh_bd_demo1
