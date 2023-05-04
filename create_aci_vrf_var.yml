@@ -1,0 +1,21 @@
+---
+- name: ACI Demo create VRF
+  hosts: aci
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Get a new VRF to a tenant
+      cisco.aci.aci_vrf:
+        hostname: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: false
+        vrf: "{{ item.vrf_name }}"
+        tenant: 00_RH_ANSIBLE_TENANT_DEMO
+        descr: "{{ item.vrf_name }}"
+        policy_control_preference: enforced
+        policy_control_direction: ingress
+        state: present
+      delegate_to: localhost
+      loop: "{{ jp_tenant_00_vrf_list }}"

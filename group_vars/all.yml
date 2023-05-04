@@ -15,4 +15,9 @@ jp_tenant_00_bd_list:
     bd_name: rh_bd_demo3
   -
     bd_name: rh_bd_demo4
-    
+
+jp_tenant_00_vrf_list:
+  -
+    vrf_name: rh_vrf_demo1
+  -
+    vrf_name: rh_vrf_demo2
