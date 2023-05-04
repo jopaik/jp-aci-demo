@@ -1,3 +1,7 @@
 jp_tenants_group_list:
-  - { name: '00_RH_ANSIBLE_TENANT_DEMO', desc: '00_RedHat_Tenant_ACI' }
-  - { name: '01_RH_ANSIBLE_TENANT_DEMO', desc: '01_RedHat_Tenant_ACI' }
+  -
+    name: '00_RH_ANSIBLE_TENANT_DEMO'
+    desc: '00_RedHat_Tenant_ACI'
+  -
+    name: '01_RH_ANSIBLE_TENANT_DEMO'
+    desc: '01_RedHat_Tenant_ACI'
