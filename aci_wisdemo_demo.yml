@@ -6,17 +6,14 @@
   tasks:
     - name: Create tenant
       cisco.aci.aci_tenant:
-        hostname: "{{ inventory_hostname }}"
+        host: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
         use_proxy: false
         validate_certs: "{{ validate_certs }}"
-        tenant: "{{ tenant }}"
-        description: "{{ description }}"
-        state: present
-      register: tenant_present
-      loop:
-      - '{{ tenant_test }}'
+        name: AnsibleTest
+        descr: tenant by Ansible
+        output_path: dump.json
       
     - name: Create vrf 
       cisco.aci.aci_vrf:
@@ -32,13 +29,16 @@
 
   
    
-    - name: Create BD
+    - name: create BD
       cisco.aci.aci_bd:
         hostname: "{{ inventory_hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
         use_proxy: false
         validate_certs: "{{ validate_certs }}"
-        bd: "{{ bd }}"
+        name: AnsibleTest_BD1
+        vrf: AnsibleTest_VRF
+        tenant: AnsibleTest
         state: present
+        description: Ansible Test
       register: bd_present
