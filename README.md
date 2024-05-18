@@ -8,7 +8,7 @@ username: admin
 
 password: !v3G@!4@Y
 
-I have created Ansible playbooks to create, get, and remove tenant, epg, vrf and bridge domains to execute
+I have created Ansible playbooks to create, get, and remove configurations to execute
 against Cisco DevNets Cisco ACI.
 
 Thanks to Cisco DevNet for keeping the cloud ACI environment available.
